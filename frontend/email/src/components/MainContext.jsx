@@ -2,9 +2,13 @@ import React, { useState } from 'react'
 import templates from '../data/template.js' // Assuming you have a file with templates data
 
 const MainContext = () => {
-    const [template, settemplate] = useState("")
+   
     const [subject, setSubject] = useState("")
     const [body, setBody] = useState("")
+
+    const sendEmail =() =>{
+        console.log("Email sent with subject:" + subject + " and body: " + body)
+    }
 
    
       
@@ -44,7 +48,9 @@ const MainContext = () => {
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                 />
-                <button className="bg-blue-500 text-white px-4 py-2 mt-4 ml-60 rounded cursor-pointer w-50">Send</button>
+                <button className="bg-blue-500 text-white px-4 py-2 mt-4 ml-60 rounded cursor-pointer w-50"
+                onClick={sendEmail}
+                >Send</button>
             </section>
         </main>
     )
