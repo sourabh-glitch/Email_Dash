@@ -2,6 +2,7 @@ import React from 'react'
 import { MdOutlineMailOutline } from "react-icons/md";
 import { FaBell } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
+import { BsBinoculars } from "react-icons/bs";
 
 const Navbar = () => {
   return (
@@ -11,14 +12,14 @@ const Navbar = () => {
         {/* logo and name of the app */}
 
         <div className="border-2 flex items-center  bg-green-300">
-            <span className="mr-3"><MdOutlineMailOutline /> </span>
-            <span className="logo-name">MailDash</span>
+            <span className="mr-3"><BsBinoculars /> </span>
+            <span className="logo-name">NOC Portal</span>
         </div>
 
         {/* title */}
 
         <div className="border-2  bg-orange-200">
-            <h3 className='m-3'>Compose Email</h3>
+            <h3 className='m-3'>NOC</h3>
         </div>
 
         {/* user section */}

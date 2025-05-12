@@ -1,22 +1,9 @@
-import './App.css'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
-import MainContext from './components/MainContext'
+import './App.css';
+import { useRoutes } from 'react-router-dom';
+import { appRoutes } from './data/appRoutes.jsx';
 
-function App() {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+const AppRoutes = () => useRoutes(appRoutes);
 
-      <div className="flex h-screen overflow-hidden bg-gray-100">
-        {/* Sidebar */}
-        <Sidebar />
+const App = () => <AppRoutes />;
 
-        {/* Main content */}
-        <MainContext />
-      </div>
-    </div>
-  )
-}
-
-export default App
+export default App;
