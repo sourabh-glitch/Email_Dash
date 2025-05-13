@@ -55,8 +55,8 @@ async function syncTicketsToDb() {
   }
 }
 
-// Run once on startup
-// syncTicketsToDb();
+// / Run once on startup
+syncTicketsToDb();
 
 // Schedule to run every 60 minutes
 // cron.schedule('0 * * * *', () => {

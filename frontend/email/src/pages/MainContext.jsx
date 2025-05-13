@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 
 const MainContext = () => {
     const [loading, setLoading] = useState(false);
+    
+    const baseUrl = import.meta.env.VITE_API_URL;
 
     const [formData, setFormdata] = useState({
         subject: "",
@@ -24,7 +26,7 @@ const MainContext = () => {
     const sendEmail = async () => {
         setLoading(true);
         try {
-            const response = await axios.post("http://localhost:5000/send-email", formData);
+            const response = await axios.post(`${baseUrl}/send-email`, formData);
             console.log("Email Sent", response.data.message);
             toast.success('Email sent successfully!');
             setFormdata({ subject: '', body: '', recipient: '', cc: '', bcc: '' });

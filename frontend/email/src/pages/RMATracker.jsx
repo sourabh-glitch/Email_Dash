@@ -6,6 +6,8 @@ const RMATracker = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
 
+  const baseUrl = import.meta.env.VITE_API_URL;
+
   const PRIORITY_MAP = {
     1: { label: 'Low', color: 'text-green-600' },
     2: { label: 'Medium', color: 'text-yellow-600' },
@@ -25,7 +27,7 @@ const RMATracker = () => {
   useEffect(() => {
     const fetchRmaTickets = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/rma-tickets');
+        const response = await fetch(`${baseUrl}/api/rma-tickets`);
         const data = await response.json();
         setTickets(data);
       } catch (error) {
@@ -47,12 +49,26 @@ const RMATracker = () => {
       ticket.ticket_id?.toString().includes(searchTerm)
     )
     .sort((a, b) => {
-      if (sortOrder === 'asc') return a.priority - b.priority;
-      else return b.priority - a.priority;
+      return sortOrder === 'asc'
+        ? a.priority - b.priority
+        : b.priority - a.priority;
     });
 
   const toggleSort = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+  };
+
+  const formatDate = (dateStr) => {
+    return new Date(dateStr).toLocaleString('en-US', {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
   };
 
   return (
@@ -64,7 +80,7 @@ const RMATracker = () => {
         placeholder="Search by subject, email, or ID..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-full  focus:outline-none focus:ring focus:border-blue-300"
+        className="mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-full focus:outline-none focus:ring focus:border-blue-300"
       />
 
       {loading ? (
@@ -110,10 +126,10 @@ const RMATracker = () => {
                     {PRIORITY_MAP[ticket.priority]?.label || 'Unknown'}
                   </td>
                   <td className="px-4 py-2 text-sm text-gray-800">
-                    {new Date(ticket.created_at).toLocaleString()}
+                    {formatDate(ticket.created_at)}
                   </td>
                   <td className="px-4 py-2 text-sm text-gray-800">
-                    {new Date(ticket.updated_at).toLocaleString()}
+                    {formatDate(ticket.updated_at)}
                   </td>
                 </tr>
               ))}
