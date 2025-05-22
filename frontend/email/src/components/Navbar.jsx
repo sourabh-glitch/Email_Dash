@@ -1,39 +1,19 @@
-import React from 'react'
-import { MdOutlineMailOutline } from "react-icons/md";
-import { FaBell } from "react-icons/fa";
-import { IoSettings } from "react-icons/io5";
-import { BsBinoculars } from "react-icons/bs";
+import React from "react";
+import { FiSearch } from "react-icons/fi";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between p-4 bg-gray-100 border-b shadow-md">
-
-
-        {/* logo and name of the app */}
-
-        <div className="border-2 flex items-center  bg-green-300">
-            <span className="mr-3"><BsBinoculars /> </span>
-            <span className="logo-name">NOC Portal</span>
-        </div>
-
-        {/* title */}
-
-        <div className="border-2  bg-orange-200">
-            <h3 className='m-3'>NOC</h3>
-        </div>
-
-        {/* user section */}
-
-        <div className="border-2 flex items-center bg-blue-200">
-            <button>
-            <FaBell />
-
-            </button>
-            <span className="ml-4">User Name</span>
-            <span className='ml-4'><IoSettings /></span>
-        </div>
+    <header className="w-full h-14 bg-[#0f2c5c] flex items-center justify-center px-4 shadow">
+      <div className="relative w-full max-w-4xl">
+        <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
+        <input
+          type="text"
+          placeholder="Search..."
+          className="w-full pl-10 pr-4 py-2 rounded bg-[#183b70] text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
+      </div>
     </header>
-)}
+  );
+};
 
-export default Navbar
-
+export default Navbar;

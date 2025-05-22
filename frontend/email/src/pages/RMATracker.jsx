@@ -7,6 +7,7 @@ const RMATracker = () => {
   const [sortOrder, setSortOrder] = useState('asc');
 
   const baseUrl = import.meta.env.VITE_API_URL;
+  const tickUrl = import.meta.env.VITE_TICKET_URL;
 
   const PRIORITY_MAP = {
     1: { label: 'Low', color: 'text-green-600' },
@@ -27,7 +28,7 @@ const RMATracker = () => {
   useEffect(() => {
     const fetchRmaTickets = async () => {
       try {
-        const response = await fetch(`${baseUrl}/api/rma-tickets`);
+        const response = await fetch(`${baseUrl}/api/tickets/RMA`);
         const data = await response.json();
         setTickets(data);
       } catch (error) {
@@ -105,6 +106,7 @@ const RMATracker = () => {
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Created</th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Updated</th>
+                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -130,6 +132,16 @@ const RMATracker = () => {
                   </td>
                   <td className="px-4 py-2 text-sm text-gray-800">
                     {formatDate(ticket.updated_at)}
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-800">
+                    <a
+                      href={`${tickUrl}${ticket.ticket_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline hover:text-blue-800 text-sm font-medium"
+                    >
+                      View
+                    </a>
                   </td>
                 </tr>
               ))}

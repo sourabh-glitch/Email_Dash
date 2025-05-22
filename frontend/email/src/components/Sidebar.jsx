@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import {
   Menu,
   Mail,
@@ -21,44 +20,61 @@ const navItems = [
   { path: "/license", label: "License", icon: KeyRound },
 ];
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
-
-  const toggleCollapse = () => {
-    setIsCollapsed((prev) => !prev);
-  };
 
   return (
     <aside
-      className={`${
+      className={`h-screen  bg-[#0f2c5c] transition-all duration-300 flex flex-col ${
         isCollapsed ? "w-16" : "w-64"
-      } bg-white p-4 shadow-md transition-all duration-300 flex flex-col`}
+      } text-white shadow-lg`}
     >
-      {/* Toggle Button */}
-      <button onClick={toggleCollapse} className="mb-6 text-left">
-        <Menu className="w-6 h-6" />
-      </button>
+      {/* Top Header */}
+      <div className="flex items-center justify-between p-4  border-blue-800">
+        {!isCollapsed && (
+          <div className="text-lg font-bold tracking-wide">NOC Tracker</div>
+        )}
+        <button
+          onClick={() => setIsCollapsed((prev) => !prev)}
+          className="p-2 rounded-md transition-transform duration-300 hover:scale-110 hover:bg-white hover:text-[#0f2c5c]"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+      </div>
 
       {/* Navigation */}
-      <nav className="flex flex-col space-y-6">
+      <nav className="flex-1 overflow-auto mt-5 space-y-2 px-1">
         {navItems.map(({ path, label, icon: Icon }) => {
           const isActive = location.pathname === path;
+
           return (
             <Link
               key={path}
               to={path}
-              className={`flex items-center transition-all duration-200 ${
-                isCollapsed ? "justify-center" : "gap-3"
-              } ${isActive ? "text-blue-600 font-semibold" : "text-gray-800 hover:text-blue-600"}`}
               title={isCollapsed ? label : undefined}
+              className={`group flex items-center px-3 py-2 text-md font-medium transition-all duration-200 
+                rounded-md border-y-2 border-transparent
+                ${
+                  isActive
+                    ? "bg-white text-[#15255F] font-semibold"
+                    : "hover:text-white hover:bg-[#0f2c5c] hover:border-y-white hover:scale-105"
+                }
+                ${isCollapsed ? "justify-center" : "gap-2"}
+              `}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
               {!isCollapsed && <span>{label}</span>}
             </Link>
           );
         })}
       </nav>
+
+      {/* Footer */}
+      {!isCollapsed && (
+        <div className="p-4 mt-auto text-sm text-blue-200  border-blue-800">
+          <p>© 2025 Company</p>
+        </div>
+      )}
     </aside>
   );
 };

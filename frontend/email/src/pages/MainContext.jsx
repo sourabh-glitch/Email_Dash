@@ -38,7 +38,7 @@ const MainContext = () => {
     };
 
     return (
-        <main className="flex w-full min-h-screen bg-gray-200 p-8 gap-8">
+        <main className="flex w-full min-h-screen p-8 gap-8">
             {/* Left side (Sidebar) */}
             <aside className="w-64 bg-white p-4 shadow-md rounded">
                 <h3 className="font-semibold text-lg mb-4">Templates</h3>
