@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import usePagination from '../hooks/usePagination';
+import Pagination from '../components/Pagination';
+
 const RMATracker = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +57,15 @@ const RMATracker = () => {
         ? a.priority - b.priority
         : b.priority - a.priority;
     });
+const rowsPerPage = 10;
+  const {
+    currentData,
+    currentPage,
+    maxPage,
+    nextPage,
+    prevPage,
+    goToPage
+  } = usePagination(filteredTickets, rowsPerPage);
 
   const toggleSort = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -110,12 +122,14 @@ const RMATracker = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredTickets.map((ticket, index) => (
+              {currentData.map((ticket, index) => (
                 <tr
                   key={`${ticket.ticket_id}-${index}`}
                   className="border-t border-gray-200 hover:bg-gray-50"
                 >
-                  <td className="px-4 py-2 text-sm text-gray-800">{index + 1}</td>
+                  <td className="px-4 py-2 text-sm text-gray-800">
+      {(currentPage - 1) * rowsPerPage + index + 1}
+    </td>
                   <td className="px-4 py-2 text-sm text-gray-800">{ticket.ticket_id}</td>
                   <td className="px-4 py-2 text-sm text-gray-800">{ticket.subject}</td>
                   <td className="px-4 py-2 text-sm text-gray-800">{ticket.requester_id}</td>
@@ -147,6 +161,13 @@ const RMATracker = () => {
               ))}
             </tbody>
           </table>
+          <Pagination
+            currentPage={currentPage}
+            maxPage={maxPage}
+            onNext={nextPage}
+            onPrev={prevPage}
+            goToPage={goToPage}
+          />
         </div>
       )}
     </div>

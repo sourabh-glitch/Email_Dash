@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import usePagination from '../hooks/usePagination';
+import Pagination from '../components/Pagination';
+
 
 const AlertDashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  
 
   const baseUrl = import.meta.env.VITE_API_URL;
   const tickUrl = import.meta.env.VITE_TICKET_URL;
 
+ 
 
   const PRIORITY_MAP = {
     1: { label: 'Low', color: 'text-green-600' },
@@ -50,15 +55,24 @@ const AlertDashboard = () => {
       ticket.requester_id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
       ticket.ticket_id?.toString().includes(searchTerm)
     )
-    .sort((a, b) => {
-      return sortOrder === 'asc'
-        ? a.priority - b.priority
-        : b.priority - a.priority;
-    });
+    .sort((a, b) =>
+      sortOrder === 'asc' ? a.priority - b.priority : b.priority - a.priority
+    );
+const rowsPerPage = 10
+  const {
+    currentData,
+    currentPage,
+    maxPage,
+    nextPage,
+    prevPage,
+    goToPage
+  } = usePagination(filteredTickets, rowsPerPage);
 
   const toggleSort = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   };
+
+ 
 
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleString('en-US', {
@@ -108,19 +122,26 @@ const AlertDashboard = () => {
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Created</th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Updated</th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Action</th>
-
-       
               </tr>
             </thead>
             <tbody>
-              {filteredTickets.map((ticket, index) => (
+              {currentData.map((ticket, index) => (
                 <tr
                   key={`${ticket.ticket_id}-${index}`}
-                  className="border-t border-gray-200  hover:bg-gray-100"
+                  className="border-t border-gray-200 hover:bg-gray-100"
                 >
-                  <td className="px-4 py-2 text-sm text-gray-800">{index + 1}</td>
+                  <td className="px-4 py-2 text-sm text-gray-800">
+      {(currentPage - 1) * rowsPerPage + index + 1}
+    </td>
                   <td className="px-4 py-2 text-sm text-gray-800">{ticket.ticket_id}</td>
-                  <td className="px-4 py-2 text-sm text-gray-800">{ticket.subject}</td>
+                  <td className="px-4 py-2 text-sm text-gray-800 max-w-[250px]">
+  <div
+    className="truncate hover:overflow-visible hover:whitespace-normal relative z-10"
+    title={ticket.subject}
+  >
+    {ticket.subject}
+  </div>
+</td>
                   <td className="px-4 py-2 text-sm text-gray-800">{ticket.requester_id}</td>
                   <td className="px-4 py-2 text-sm text-gray-800">
                     {STATUS_MAP[ticket.status] || (
@@ -130,14 +151,26 @@ const AlertDashboard = () => {
                   <td className={`px-4 py-2 text-sm font-medium ${PRIORITY_MAP[ticket.priority]?.color || 'text-gray-600'}`}>
                     {PRIORITY_MAP[ticket.priority]?.label || 'Unknown'}
                   </td>
+                  <td className="px-4 py-2 text-sm text-gray-800 max-w-[180px]">
+  <div
+    className="truncate hover:overflow-visible hover:whitespace-normal relative z-10"
+    title={formatDate(ticket.created_at)}
+  >
+    {formatDate(ticket.created_at)}
+  </div>
+</td>
+
+<td className="px-4 py-2 text-sm text-gray-800 max-w-[180px]">
+  <div
+    className="truncate hover:overflow-visible hover:whitespace-normal relative z-10"
+    title={formatDate(ticket.updated_at)}
+  >
+    {formatDate(ticket.updated_at)}
+  </div>
+</td>
+
                   <td className="px-4 py-2 text-sm text-gray-800">
-                    {formatDate(ticket.created_at)}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-800">
-                    {formatDate(ticket.updated_at)}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-800">
-                       <a
+                    <a
                       href={`${tickUrl}${ticket.ticket_id}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -150,6 +183,15 @@ const AlertDashboard = () => {
               ))}
             </tbody>
           </table>
+
+           <Pagination
+            currentPage={currentPage}
+            maxPage={maxPage}
+            onNext={nextPage}
+            onPrev={prevPage}
+            goToPage={goToPage}
+          />
+          
         </div>
       )}
     </div>
